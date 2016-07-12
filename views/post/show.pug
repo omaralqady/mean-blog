@@ -27,5 +27,5 @@ block content
 					h3(class='post-user') 
 						a(href='/post/show/username/{{post.username}}') By: {{post.username}}
 			div(class='panel-body')
-				pre {{post.content}}
+				pre(class='post-content') {{post.content}}
 		div(ng-repeat-end)
