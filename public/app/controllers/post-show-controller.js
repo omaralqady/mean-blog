@@ -15,16 +15,26 @@ blog.controller( 'showPostController', function( $scope, $http, $location,
 	$scope.deletePost = function( postId ) {
 
 		$http.delete( '/api/post/' + postId )
-			.then( function( res ) {
-				if ( res.status === 200 ) {
-					$window.location.href = '/post/show/mine';
-				} else {
-					alert( res.data );
-				}
-			} )
-			.catch( function( err ) {
-				alert( err );
-			} );
+		.then( function( res ) {
+
+			if ( res.status === 200 ) {
+
+				$window.location.href = '/post/show/mine';
+			} else {
+
+				alert( res.data );
+			}
+		} )
+		.catch( function( err ) {
+
+			if ( err.data.message ) {
+
+				alert( err.data.message );
+			} else {
+
+				alert( 'Error retrieving posts!' );
+			}
+		} );
 
 		return false;
 	};
@@ -40,34 +50,39 @@ blog.controller( 'showPostController', function( $scope, $http, $location,
 	}
 
 	$http.get( url )
-		.then( function( res ) {
+	.then( function( res ) {
 
-			if ( res.status === 200 ) {
+		if ( res.status === 200 ) {
 
-				//$scope.postList = [];
+			//$scope.postList = [];
 
-				var resData = res.data;
+			var resData = res.data;
 
-				for ( let i = 0; i < resData.length; i++ ) {
-					if ( resData[ i ].username === $cookies.get( 'username' ) )
-						resData[ i ].ownPost = true;
-					else
-						resData[ i ].ownPost = false;
-				}
-
-				$scope.postList = resData;
-
-				$scope.noPosts = false;
-				if ( $scope.postList.length === 0 ) {
-					$scope.noPosts = true;
-				}
-			} else {
-
-				alert( res.data );
+			for ( let i = 0; i < resData.length; i++ ) {
+				if ( resData[ i ].username === $cookies.get( 'username' ) )
+					resData[ i ].ownPost = true;
+				else
+					resData[ i ].ownPost = false;
 			}
-		} )
-		.catch( function( err ) {
 
+			$scope.postList = resData;
+
+			$scope.noPosts = false;
+			if ( $scope.postList.length === 0 ) {
+				$scope.noPosts = true;
+			}
+		} else {
+
+			alert( res.data );
+		}
+	} )
+	.catch( function( err ) {
+
+		if ( err.data.message ) {
+
+			alert( res.data.message );
+		} else {
 			alert( 'Error retrieving posts from server.' );
-		} );
+		}
+	} );
 } );

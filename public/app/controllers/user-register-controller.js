@@ -54,16 +54,26 @@ blog.controller( 'userRegistrationController', function( $scope, $http, $window 
 		if ( isFormValid( userData ) ) {
 
 			$http.post( '/api/user/register', userData )
-				.then( function( res ) {
-					if ( res.status === 200 ) {
-						$window.location.href = '/login';
-					} else {
-						alert( res.data );
-					}
-				} )
-				.catch( function( err ) {
+			.then( function( res ) {
+
+				if ( res.status === 200 ) {
+
+					$window.location.href = '/login';
+				} else {
+					
+					alert( res.data );
+				}
+			} )
+			.catch( function( err ) {
+
+				if ( err.data.message ) {
+
+					alert( err.data.message );
+				} else {
+
 					alert( 'Error sending data to server. Please try again.' );
-				} );
+				}
+			} );
 		}
 	};
 } );

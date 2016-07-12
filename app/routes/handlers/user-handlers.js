@@ -22,16 +22,21 @@ var userHandlers = {
 		//saves object to db
 		function saveUser(userData) {
 
-			logger.trace('user data in save: ', userData);
-
 			var newUser = new User(userData);
 
 			newUser.save(function(err, user) {
 				if(err) {
-					
+
 					logger.debug('Error inserting data into DB: ', err);
 					logger.trace('Erroneous data: ', userData);
-					res.status(500).json({message: 'Error inserting user data into DB.'});
+
+					if( err.code === 11000 ) {
+
+						res.status(409).json({message: 'Duplicate username and/or email address.'});
+					} else {
+						
+						res.status(500).json({message: 'Error inserting user data into DB.'});
+					}
 				} else {
 					res.redirect('/login');
 				}
@@ -75,8 +80,6 @@ var userHandlers = {
 				//remove unnecessary fields
 				delete value['confirmEmail'];
 				delete value['confirmPassword'];
-
-				logger.trace('value in /user/reg: ', value);
 
 				registerUser(value);
 			}

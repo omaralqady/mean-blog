@@ -9,8 +9,10 @@ blog.controller( 'publishPostController', function( $scope, $http, $window,
 			if ( $scope.content !== undefined && $scope.content !== '' && $scope.title !==
 				undefined && $scope.title !== '' && $scope.topic !== undefined && $scope
 				.topic !== '' ) {
+
 				return true;
 			} else {
+
 				return false;
 			}
 		}
@@ -21,6 +23,7 @@ blog.controller( 'publishPostController', function( $scope, $http, $window,
 		postData.topic = $scope.topic;
 
 		if ( isFormValid() ) {
+
 			$http.post( '/api/post', postData )
 				.then( function( res ) {
 
@@ -36,8 +39,12 @@ blog.controller( 'publishPostController', function( $scope, $http, $window,
 					}
 				} )
 				.catch( function( err ) {
+					if ( err.data.message ) {
 
-					alert( 'Error sending post data to server.' );
+						alert( err.data.message );
+					} else {
+						alert( 'Error sending post data to server.' );
+					}
 				} );
 		} else {
 

@@ -30,7 +30,8 @@ var postHandlers = {
 			postObject.topic = req.body.topic;
 			postObject.content = req.body.content;
 		} else {
-			var errMessage = 'Incomplete data sent. Post title, topic, and content are all required!' ;
+			var errMessage =
+				'Incomplete data sent. Post title, topic, and content are all required!';
 			res.status( 409 ).json( { message: errMessage } );
 			return;
 		}
@@ -52,7 +53,13 @@ var postHandlers = {
 		newPost.save( function( err, post ) {
 			if ( err ) {
 
-				res.status( 500 ).json( { message: 'There was an error publishing the post. Please try again.' } );
+				if ( err.code === 11000 ) {
+
+					res.status( 409 ).json( { message: 'You already have a post with the same title. Titles are unique per user. Either update the existing post or delete it first.' } );
+				} else {
+
+					res.status( 500 ).json( { message: 'There was an error publishing the post. Please try again.' } );
+				}
 			} else {
 
 				res.redirect( '/post/show/username/' + username + '/title/' + post.title );
@@ -194,7 +201,7 @@ var postHandlers = {
 					logger.trace( 'Result of deleting post: ', result );
 					res.status( 200 ).end();
 				} else {
-					
+
 					res.status( 500 ).json( { message: 'Error deleting post.' } );
 				}
 			}
@@ -204,3 +211,4 @@ var postHandlers = {
 
 //
 module.exports = postHandlers;
+

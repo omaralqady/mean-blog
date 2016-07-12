@@ -21,12 +21,19 @@ blog.controller( 'loginController', function( $scope, $http, $window ) {
 					}
 				} )
 				.catch( function( err ) {
+					
+					if ( err.data.message ) {
 
-					alert( 'Error sending login data to server. Please try again.' );
-				} )
+						alert( err.data.message );
+					} else {
+
+						alert( 'Error sending login data to server. Please try again.' );
+					}
+				} );
 		} else {
 			$scope.formInvalid = true;
 			$scope.errorMessage = 'You must enter a username and a password!';
 		}
 	};
 } );
+

@@ -18,7 +18,13 @@ blog.controller( 'updatePostController', function( $scope, $http, $window,
 				return;
 			} )
 			.catch( function( err ) {
-				alert( 'Error retrieving post data.' );
+
+				if ( err.data.message ) {
+
+					alert( err.data.message );
+				} else {
+					alert( 'Error retrieving post data.' );
+				}
 			} );
 	};
 
@@ -45,22 +51,28 @@ blog.controller( 'updatePostController', function( $scope, $http, $window,
 		if ( isFormValid() ) {
 
 			$http.put( '/api/post/' + postData._id, postData )
-				.then( function( res ) {
+			.then( function( res ) {
 
-					if ( res.status === 200 ) {
+				if ( res.status === 200 ) {
 
-						var newPostURL = '/post/show/' + $scope._id;
-						$window.location.href = newPostURL;
+					var newPostURL = '/post/show/' + $scope._id;
+					$window.location.href = newPostURL;
 
-					} else {
+				} else {
 
-						alert( 'Error publishing post.' );
-					}
-				} )
-				.catch( function( err ) {
+					alert( 'Error publishing post.' );
+				}
+			} )
+			.catch( function( err ) {
+
+				if ( err.data.message ) {
+
+					alert( err.data.message );
+				} else {
 
 					alert( 'Error sending post data to server.' );
-				} );
+				}
+			} );
 		} else {
 
 			alert( 'Title, topic, and post are all required fields.' );
