@@ -1,0 +1,9 @@
+.logo {
+	border-right: 3px solid white;
+	margin-left: 5%;
+}
+
+.navbar .navbar-nav > li > a:hover{
+	background-color: green;
+	color: yellow;
+}

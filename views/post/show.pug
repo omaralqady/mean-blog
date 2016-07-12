@@ -1,0 +1,31 @@
+extends ../layout.pug
+
+block content
+	script(src='/app/controllers/post-show-controller.js')
+	link(rel='stylesheet', href='/resources/css/custom-post-show.css')
+	div(ng-controller='showPostController')
+		div(class='panel panel-default center-div' ng-show='noPosts')
+			div(class='panel-body')
+				p
+					| Oops! There are no posts yet!
+				p
+					a(href='/post/publish') Let's publish our first post.
+		div(class='panel panel-default' ng-repeat-start='post in postList')
+			div(class='panel-heading position-relative')
+				h1(class='post-title') 
+					a(href='/post/show/username/{{post.username}}/title/{{post.title}}') {{post.title}}
+				div(class='dropdown dropdown-toggle menu-right-align' ng-show='{{post.ownPost}}') 
+					input(type='button' class='btn btn-default' data-toggle='dropdown' value='Options')
+					ul(class='dropdown-menu dropdown-menu-right' name='optionsMenu_{{post._id}}' id='optionsMenu_{{post._id}}')
+						li
+							a(href='/post/update/{{post._id}}') Update Post
+						li
+							a(href='#' ng-click='deletePost(post._id)') Delete Post
+				div(class='post-header')
+					h3(class='post-topic') 
+						a(href='/post/show/topic/{{post.topic}}') Topic: {{post.topic}}
+					h3(class='post-user') 
+						a(href='/post/show/username/{{post.username}}') By: {{post.username}}
+			div(class='panel-body')
+				pre {{post.content}}
+		div(ng-repeat-end)

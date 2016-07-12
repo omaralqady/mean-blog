@@ -1,0 +1,21 @@
+extends ../layout.pug
+
+block content
+	script(src='/app/controllers/post-publish-controller.js')
+	link(rel='stylesheet', href='/resources/css/custom-post-publish.css')
+	div(ng-controller='publishPostController')
+		h2(class='text-center') New Post
+		form(name='publish-post-form')
+			div
+				div
+					label(for='title') Title: 
+					input(type='text' class='form-control' ng-model='title' name='title' required)
+				div
+					label(for='topic') Topic: 
+					input(type='text' class='form-control' ng-model='topic' name='topic' required)
+			div(class='post-content')
+				label(for='content' align='center') Post Content: 
+				textarea(class='form-control' ng-model='content' rows='12' name='content' required)
+			br
+			div(class='text-center')
+				input(type='submit' value='Publish Post' class='btn btn-primary' ng-click='publishPostSubmitFn()')

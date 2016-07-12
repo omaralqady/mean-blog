@@ -1,0 +1,33 @@
+extends ../layout.pug
+
+block content
+	script(src='/app/controllers/user-register-controller.js')
+	link(rel='stylesheet', href='/resources/css/custom-user-register.css')
+	h1= pageTitle
+	div(ng-controller='userRegistrationController')
+		form(name='userRegistrationForm')
+			div(class='alert alert-danger' ng-bind='errorMessage' ng-show='validationError')
+			div(class='form-group')
+				label(for='name') Name
+				input(type='text' class='form-control' ng-model='name' name='name')
+			div(class='form-group')
+				label(for='username') Username
+				input(type='text' class='form-control' ng-model='username' name='username')
+			div(class='form-group')
+				label(for='email') Email
+				input(type='email' class='form-control' ng-model='email' name='email')
+				label(for='confirmEmail') Confirm Email
+				input(type='email' class='form-control' ng-model='confirmEmail' name='confirmEmail')
+			div(class='form-group')
+				label(for='password') Password
+				input(type='password' class='form-control' ng-model='password' name='password')
+				label(for='confirmPassword') Confirm Password
+				input(type='password' class='form-control' ng-model='confirmPassword' name='confirmPassword')
+			div(class='form-group')
+				label(for='dob') Date of Birth
+				input(type='date' class='form-control' ng-model='dob' name='dob')
+			br
+			div(class='text-center')
+				input(type='submit' class='btn btn-primary' ng-model='register' id='register-btn' name='register' value='Register' ng-click='registerUserSubmitFn()')
+
+

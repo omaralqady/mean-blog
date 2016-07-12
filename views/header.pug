@@ -1,0 +1,22 @@
+link(rel='stylesheet', href='/resources/css/custom-header.css')
+script(src='/app/controllers/header-controller.js')
+div(class='navbar navbar-default' ng-controller='headerController')
+	div(class='container-fluid')
+		div(class='navbar-header')
+			span(class='navbar-brand logo')= title
+		ul(class='nav navbar-nav')
+			li
+				a(href='/post/publish') Publish Post
+			li
+				a(href='/post/show') All Posts
+			li
+				a(href='/post/show/mine') My Posts
+		ul(class='nav navbar-nav navbar-right')
+			li
+				a(href='/statistics') Blog Statistics
+			li(ng-show='!isLoggedIn')
+				a(href='/login') Login
+			li(ng-show='!isLoggedIn')
+				a(href='/user/register') Register
+			li(ng-show='isLoggedIn')
+				a(href='/logout') Logout

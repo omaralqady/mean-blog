@@ -1,0 +1,23 @@
+extends layout.pug
+
+block content
+	script(src='/app/controllers/statistics-controller.js')
+	link(rel='stylesheet', href='/resources/css/custom-statistics.css')
+	div(ng-controller='statisticsController')
+		div(class='panel panel-default')
+			div(class='panel-heading')
+				h1 Posts per user
+			div(class='panel-body')
+				ul(class='list-group')
+					li(ng-repeat-start='user in userList' class='list-group-item') {{user._id}}
+						span(class='badge') {{user.count}}
+					li(ng-repeat-end)
+
+		div(class='panel panel-default')
+			div(class='panel-heading')
+				h1 Posts per topic
+			div(class='panel-body')
+				ul(class='list-group')
+					li(ng-repeat-start='topic in topicList' class='list-group-item') {{topic._id}}
+						span(class='badge') {{topic.count}}
+					li(ng-repeat-end)

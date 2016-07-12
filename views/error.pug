@@ -1,0 +1,7 @@
+extends layout.pug
+
+block content
+	link(rel='stylesheet', href='/resources/css/custom-error.css')
+	div(class='error')
+		h1= errorTitle
+		div(class='error-message')= message

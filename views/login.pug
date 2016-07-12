@@ -1,0 +1,19 @@
+extends layout.pug
+
+block content
+	script(src='/app/controllers/login-controller.js')
+	link(rel='stylesheet', href='/resources/css/custom-login.css')
+	div(ng-controller='loginController' class='login-form-div')
+		div(class='alert alert-danger' ng-bind='errorMessage' ng-show='formInvalid')
+		form(name='loginForm' class='form-horizontal')
+			div(class='form-group')
+				label(for='username') Username
+				input(type='text' class='form-control' ng-model='username' name='username' required)
+			div(class='form-group')
+				label(for='password') Password
+				input(type='password' class='form-control' ng-model='password' name='password' required)
+			br
+			br
+			input(type='submit' value='Login' class='btn btn-primary' ng-click='loginSubmitFn()')
+
+	

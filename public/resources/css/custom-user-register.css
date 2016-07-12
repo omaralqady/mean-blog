@@ -1,0 +1,15 @@
+.form-group {
+	margin-top: 2%;
+	margin-bottom: 2%;
+}
+
+h1 {
+	text-align: center;
+}
+
+.error-message {
+	color: red;
+	background: blue;
+	border: 1px solid;
+	text-align: center;;
+}
