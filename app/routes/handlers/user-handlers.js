@@ -28,6 +28,9 @@ var userHandlers = {
 
 			newUser.save(function(err, user) {
 				if(err) {
+					
+					logger.debug('Error inserting data into DB: ', err);
+					logger.trace('Erroneous data: ', userData);
 					res.status(500).json({message: 'Error inserting user data into DB.'});
 				} else {
 					res.redirect('/login');
