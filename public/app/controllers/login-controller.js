@@ -1,7 +1,8 @@
 //controller for the login page
-blog.controller( 'loginController', function( $scope, $http, $window ) {
+blog.controller( 'loginController', function( $scope, $http, $window, $cookies ) {
 
 	$scope.formInvalid = false;
+	$scope.loginError = false;
 
 
 	$scope.loginSubmitFn = function() {
@@ -12,6 +13,7 @@ blog.controller( 'loginController', function( $scope, $http, $window ) {
 
 			$http.post( '/api/login', { username: $scope.username, password: $scope.password } )
 				.then( function( res ) {
+
 					if ( res.status !== 200 ) {
 
 						alert( 'Error logging in. Please try again.' );
@@ -21,8 +23,11 @@ blog.controller( 'loginController', function( $scope, $http, $window ) {
 					}
 				} )
 				.catch( function( err ) {
-					
-					if ( err.data.message ) {
+
+					if( err.status === 401 ) {
+
+						$window.location.href = err.data.redirect;
+					} else if ( err.data && err.data.message ) {
 
 						alert( err.data.message );
 					} else {
@@ -35,5 +40,19 @@ blog.controller( 'loginController', function( $scope, $http, $window ) {
 			$scope.errorMessage = 'You must enter a username and a password!';
 		}
 	};
+
+	$scope.onloadFn = function() {
+
+		if( $cookies.get('loginError') !== undefined && $cookies.get('loginError') !== null && $cookies.get('loginError') !== false) {
+
+			$scope.loginError = true;
+			$scope.loginErrorMessage = 'Username and/or password are not correct!';
+		} else {
+
+			$scope.loginError = false;
+		}
+	};
+
+	$scope.onloadFn();
 } );
 

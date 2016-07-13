@@ -5,6 +5,7 @@ block content
 	link(rel='stylesheet', href='/resources/css/custom-login.css')
 	div(ng-controller='loginController' class='login-form-div')
 		div(class='alert alert-danger' ng-bind='errorMessage' ng-show='formInvalid')
+		div(class='alert alert-danger' ng-bind='loginErrorMessage' ng-show='loginError')
 		form(name='loginForm' class='form-horizontal')
 			div(class='form-group')
 				label(for='username') Username

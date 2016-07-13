@@ -3,7 +3,6 @@
 //external
 var express = require( 'express' );
 var router = express.Router();
-var passport = require( 'passport' );
 //
 
 //models
@@ -32,8 +31,7 @@ var apiHandlers = require( './handlers/api-handlers.js' );
 /*** routes ***/
 
 //login api route
-router.post( '/login', passport.authenticate( 'local', { failureRedirect: '/login' } ),
-	apiHandlers.api_postLogin );
+router.post( '/login', apiHandlers.api_postLogin );
 
 
 //stats

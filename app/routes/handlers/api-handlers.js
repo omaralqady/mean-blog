@@ -2,6 +2,7 @@
 
 //external
 var logger = require( 'log4js' ).getLogger();
+var passport = require( 'passport' );
 //
 
 //db and models
@@ -15,19 +16,48 @@ var Post = require( './../../models/post.js' );
 
 
 var apiHandlers = {
+
 	//handles post req on /login
 	api_postLogin: function( req, res, next ) {
 
-		res.cookie( 'username', req.user.username, { path: '/' } );
+		passport.authenticate( 'local', function authCB( err, user, info ) {
 
-		if ( req.cookies !== undefined && req.cookies.redirTo !== undefined ) {
+			if ( err ) {
 
-			var pathname = req.cookies.redirTo;
-			res.clearCookie( 'redirTo' );
-			res.json( { redirect: pathname } );
-		} else {
-			res.json( { redirect: '/post/show' } );
-		}
+				return next( err );
+			}
+
+			if ( !user ) {
+
+				res.cookie( 'loginError', true );
+				return res.status( 401 ).json( { redirect: '/login' } );
+			} else {
+
+				req.logIn( user, function( err ) {
+
+					if ( err ) {
+
+						return next( err );
+					}
+
+					if ( req.cookies.loginError !== undefined ) {
+
+						res.clearCookie( 'loginError' );
+					}
+
+					res.cookie( 'username', req.user.username, { path: '/' } );
+
+					if ( req.cookies !== undefined && req.cookies.redirTo !== undefined ) {
+
+						var pathname = req.cookies.redirTo;
+						res.clearCookie( 'redirTo' );
+						return res.json( { redirect: pathname } );
+					} else {
+						return res.json( { redirect: '/post/show' } );
+					}
+				} );
+			}
+		} )( req, res, next );
 	},
 
 	//get req on /statistics
