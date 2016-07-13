@@ -21,6 +21,7 @@ blog.controller( 'publishPostController', function( $scope, $http, $window,
 		postData.content = $scope.content;
 		postData.title = $scope.title;
 		postData.topic = $scope.topic;
+		postData.private = $scope.privatePost || false;
 
 		if ( isFormValid() ) {
 
@@ -52,3 +53,4 @@ blog.controller( 'publishPostController', function( $scope, $http, $window,
 		}
 	}
 } );
+

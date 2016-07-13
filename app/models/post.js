@@ -14,7 +14,8 @@ var postSchema = new Schema( {
 	username: String,
 	topic: String,
 	title: String,
-	content: String
+	content: String,
+	private: Boolean
 } );
 
 //set the combination of username and title to be unique, so that any

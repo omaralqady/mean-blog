@@ -26,9 +26,11 @@ var postHandlers = {
 
 		if ( req.body.title !== '' && req.body.topic !== '' && req.body.content !==
 			'' ) {
+
 			postObject.title = req.body.title;
 			postObject.topic = req.body.topic;
 			postObject.content = req.body.content;
+			postObject.private = req.body.private || false;
 		} else {
 			var errMessage =
 				'Incomplete data sent. Post title, topic, and content are all required!';
@@ -79,6 +81,7 @@ var postHandlers = {
 			postObject.title = req.body.title;
 			postObject.topic = req.body.topic;
 			postObject.content = req.body.content;
+			postObject.private = req.body.private || false;
 		} else {
 
 			res.status( 409 ).json( { message: 'Incomplete data sent. Post title, topic, and content are all required!' } );
@@ -112,7 +115,12 @@ var postHandlers = {
 	//get req on /post
 	api_getAllPosts: function( req, res, next ) {
 
-		postRetriever( {}, res );
+		postRetriever( {
+			$or: [ { private: false }, {
+				username: req.user.username,
+				private: true
+			} ]
+		}, req, res );
 	},
 
 	//get req on /post/:_id
@@ -124,7 +132,15 @@ var postHandlers = {
 			return next();
 		}
 
-		postRetriever( { _id: req.params._id }, res );
+		postRetriever( {
+			$or: [
+				{ _id: req.params._id, private: false }, {
+					_id: req.params._id,
+					private: true,
+					username: req.user.username
+				}
+			]
+		}, req, res );
 	},
 
 	//get req on /post/mine
@@ -132,7 +148,7 @@ var postHandlers = {
 
 		if ( req.hasOwnProperty( 'user' ) ) {
 
-			postRetriever( { username: req.user.username }, res );
+			postRetriever( { username: req.user.username }, req, res );
 		} else {
 
 			res.status( 409 ).json( { message: 'Invalid request.' } );
@@ -147,8 +163,11 @@ var postHandlers = {
 			res.status( 409 ).json( { message: 'You have to send a username!' } );
 			return;
 		}
-
-		postRetriever( { username: req.params.username }, res );
+		if ( req.user.username === req.params.username ) {
+			postRetriever( { username: req.params.username }, req, res );
+		} else {
+			postRetriever( { username: req.params.username, private: false }, req, res );
+		}
 	},
 
 	//get req on /post/topic/:topic
@@ -159,7 +178,13 @@ var postHandlers = {
 			return;
 		}
 
-		postRetriever( { topic: req.params.topic }, res );
+		postRetriever( {
+			$and: [ { topic: req.params.topic }, {
+				$or: [ { private: false },
+					{ username: req.user.username, private: true }
+				]
+			} ]
+		}, req, res );
 	},
 
 	//get req on /post/username/:username/topic/:topic
@@ -175,8 +200,16 @@ var postHandlers = {
 			return;
 		}
 
-		postRetriever( { username: req.params.username, title: req.params.title },
-			res );
+		if ( req.params.username === req.user.username ) {
+			postRetriever( { username: req.params.username, title: req.params.title },
+				req,
+				res );
+		} else {
+			postRetriever( { username: req.params.username, title: req.params.title,
+					private: false },
+				req,
+				res );
+		}
 	},
 
 	//delete req on /post/:_id
@@ -211,4 +244,3 @@ var postHandlers = {
 
 //
 module.exports = postHandlers;
-

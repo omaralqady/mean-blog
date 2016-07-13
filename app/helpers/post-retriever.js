@@ -17,18 +17,21 @@ var Post = require( '../models/post.js' );
 
 
 
-var postRetriever = function( condition, res ) {
+var postRetriever = function( condition, req, res ) {
 
 	logger.trace( 'PostRetriever - condition: ', condition );
 
 	if ( condition === null ) {
 
 		condition = {};
+		condition.private = false;
 	}
+
+	
 
 	var query = Post.find( condition ).sort( { timestamp: 1 } );
 
-	query.select( '_id title topic content username timestamp' );
+	query.select( '_id title topic content username timestamp private' );
 
 	query.exec()
 		.then( function( data ) {

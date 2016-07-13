@@ -15,6 +15,7 @@ blog.controller( 'updatePostController', function( $scope, $http, $window,
 				$scope.title = post.title;
 				$scope.content = post.content;
 				$scope.topic = post.topic;
+				$scope.privatePost = post.private;
 				return;
 			} )
 			.catch( function( err ) {
@@ -47,6 +48,7 @@ blog.controller( 'updatePostController', function( $scope, $http, $window,
 		postData.content = $scope.content;
 		postData.title = $scope.title;
 		postData.topic = $scope.topic;
+		postData.private = $scope.privatePost || false;
 
 		if ( isFormValid() ) {
 

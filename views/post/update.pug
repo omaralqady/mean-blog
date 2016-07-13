@@ -17,5 +17,9 @@ block content
 				label(for='content' align='center') Post Content: 
 				textarea(class='form-control' ng-model='content' rows='12' name='content' required)
 			br
+			div(class='checkbox')
+				label(for='privatePost') 
+					input(type='checkbox' ng-model='privatePost' name='privatePost')
+					| Private Post
 			div(class='text-center')
 				input(type='submit' value='Update Post' class='btn btn-primary' ng-click='updatePostSubmitFn()')
